@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Match, MatchEvent
+
+admin.site.register(Match)
+admin.site.register(MatchEvent)
