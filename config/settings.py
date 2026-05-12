@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.players',
     'apps.contact',
     'apps.gallery',
+    'apps.teams',
 
     # Django Apps
     'django.contrib.admin',
