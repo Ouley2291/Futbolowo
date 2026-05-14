@@ -2,8 +2,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
-app_name = 'core'
+app_name = 'players'
 
 urlpatterns = [
-    path("", views.index, name="index")
+    path("/team_stats", views.team_stats, name="team_stats")
 ]

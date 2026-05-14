@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Team Stats {% endblock %}
+
+{% block body %}
+<div class="p-6">
+    <table>
+        <thead>
+            <tr class="bg-gray-100 text-gray-700 uppercase text-sm">
+                <th class="px-4 py-3 text-left">Num</th>
+                <th class="px-4 py-3 text-left">Player</th>
+                <th class="px-4 py-3 text-left">Birthday/Age</th>
+                <th class="px-4 py-3 text-left">Position</th>
+                <th class="px-4 py-3 text-left">Matches</th>
+                <th class="px-4 py-3 text-left">Goals</th>
+                <th class="px-4 py-3 text-left">Assists</th>
+                <th class="px-4 py-3 text-left">Clean Sheets</th>
+                <th class="px-4 py-3 text-left">Yellow Cards</th>
+                <th class="px-4 py-3 text-left">Red Cards</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            {% for player in players %}
+                <a href="#">
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-3">{{ player.number }} </td>
+                        <td class="px-4 py-3 font-medium text-gray-900"> {{ player.first_name }} {{ player.last_name }} </td>
+                        <td class="px-4 py-3"> {{ player.birth_date }} ({{ player.age }}) </td>
+                        <td class="px-4 py-3"> {{ player.position }} </td>
+                        <td class="px-4 py-3"> {{ player.matches }} </td>
+                        <td class="px-4 py-3 font-semibold"> {{ player.goals }} </td>
+                        <td class="px-4 py-3"> {{ player.assists }} </td>
+                        <td class="px-4 py-3"> {{ player.clean_sheets }} </td>
+                        <td class="px-4 py-3 text-yellow-600 font-semibold"> {{ player.yellow_cards }} </td>
+                        <td class="px-4 py-3 text-red-600 font-semibold"> {{ player.red_cards }} </td>
+                    </tr>
+                </a>
+            {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center py-6 text-gray-500"> No players found </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

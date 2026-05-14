@@ -39,6 +39,8 @@ class Player(models.Model):
     red_cards = models.PositiveIntegerField(default=0)
     yellow_cards = models.PositiveIntegerField(default=0)
 
+    matches = models.PositiveIntegerField(default=0)
+
     def __str__(self):
         return f"[{self.position}] {self.first_name} {self.last_name}"
     
