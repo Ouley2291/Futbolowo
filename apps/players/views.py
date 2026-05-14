@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Player, sort_bys_position
 
 def team_stats(request):
@@ -7,4 +7,12 @@ def team_stats(request):
 
     return render(request, 'players/team_stats.html', {
         "players": players,
+    })
+
+
+def player_stats(request, id):
+    player = get_object_or_404(Player, pk=id)
+
+    return render(request, 'players/player.html', {
+        "player": player,
     })

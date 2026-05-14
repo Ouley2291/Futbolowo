@@ -21,10 +21,13 @@
         </thead>
         <tbody class="divide-y divide-gray-200">
             {% for player in players %}
-                <a href="#">
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-4 py-3">{{ player.number }} </td>
-                        <td class="px-4 py-3 font-medium text-gray-900"> {{ player.first_name }} {{ player.last_name }} </td>
+                        <td class="px-4 py-3 font-medium text-gray-900">
+                            <a href="{% url 'players:player_stats' player.pk %}">
+                                {{ player.first_name }} {{ player.last_name }} 
+                            </a>
+                        </td>
                         <td class="px-4 py-3"> {{ player.birth_date }} ({{ player.age }}) </td>
                         <td class="px-4 py-3"> {{ player.position }} </td>
                         <td class="px-4 py-3"> {{ player.matches }} </td>
@@ -34,7 +37,6 @@
                         <td class="px-4 py-3 text-yellow-600 font-semibold"> {{ player.yellow_cards }} </td>
                         <td class="px-4 py-3 text-red-600 font-semibold"> {{ player.red_cards }} </td>
                     </tr>
-                </a>
             {% empty %}
                 <tr>
                     <td colspan="10" class="text-center py-6 text-gray-500"> No players found </td>
