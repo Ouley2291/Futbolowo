@@ -50,7 +50,7 @@ class Player(models.Model):
         return (today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day)))
 
 
-def sort_bys_position(players):
+def sort_by_position(players):
     new_list = []
     gk = players.filter(position="GK")
     cb = players.filter(position="CB")
