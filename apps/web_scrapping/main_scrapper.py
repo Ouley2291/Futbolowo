@@ -2,23 +2,15 @@
 from playwright.sync_api import sync_playwright
 import json
 
-
-
 def scrape_laczynaspilka(sezon, liga, runda, kolejka):
-    """
-    Pobiera wybraną przez nas tabele ligową do pliku JSON
-    Funkcja symuluje użytkownika biblioteką playwright przez to cały proces chwile zajmuje
-    WSZYSTKIE ARGUMENTY MUSZĄ BYĆ TAK SAMO WPISANE JAK NA STRONIE LACZYNASPILKA
-    ARGS:
-        sezon (str) - np.2025/2026
-        liga (str) - np. Ekstraklasa
-        runda (str) - np. Wiosenna
-        kolejka (str) = np. 33
-
-
-    """
     with sync_playwright() as p:
+        #Używamy fizycznie zainstalowanego Chrome'a z systemu jak macie inną trzeba zmienić channel na inny
+
+
+
+
         browser = p.chromium.launch(
+            channel="chrome",
             headless=True,
             slow_mo=300,
             args=["--disable-blink-features=AutomationControlled"]
@@ -30,33 +22,44 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
         )
 
         context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-
         page = context.new_page()
 
-        print("Ładuję główną stronę rozgrywek w tle...")
-        page.goto("https://www.laczynaspilka.pl/rozgrywki", wait_until="networkidle")
+        print("Ładuję główną stronę w tle (inicjalizacja sesji)...")
+        page.goto("https://www.laczynaspilka.pl/", wait_until="networkidle")
 
         try:
-            page.locator("text=Sezon").first.wait_for(state="visible", timeout=15000)
-
             print("Sprawdzam i klikam ciasteczka...")
-            try:
-                ciastka = page.locator("button:has-text('Zaakceptuj wszystkie')")
-                ciastka.wait_for(state="visible", timeout=6000)
-                ciastka.click(force=True)
-                print("Cookies accepted")
-            except Exception:
-                print("Ciasteczka nie wyskoczyły")
+            ciastka = page.locator("button:has-text('Zaakceptuj wszystkie')")
+            ciastka.wait_for(state="visible", timeout=6000)
+            ciastka.click(force=True)
+            print(" -> Ciasteczka ZAŁATWIONE!")
+            page.wait_for_timeout(1000)
+        except Exception:
+            print(" -> Brak ciasteczek, jedziemy dalej.")
 
-            print("Zaczęło zmieniać filtry")
+        # Wstrzykujemy kliknięcie w link, żeby gładko przejść na rozgrywki
+        print("Wymuszam przejście do zakładki Rozgrywki...")
+        page.evaluate('''() => {
+            let linki = document.querySelectorAll("a[href='/rozgrywki'], a[href='https://www.laczynaspilka.pl/rozgrywki']");
+            if (linki.length > 0) {
+                linki[0].click();
+            } else {
+                window.location.href = '/rozgrywki';
+            }
+        }''')
+
+        try:
+            page.get_by_text("Sezon", exact=True).locator("visible=true").first.wait_for(state="visible", timeout=15000)
+
+            print("Zmieniam filtry...")
 
             def wybierz_parametr(nazwa, wartosc):
                 print(f" -> Ustawiam: {nazwa} = {wartosc}")
-                pole = page.get_by_text(nazwa, exact=True).first
+                pole = page.get_by_text(nazwa, exact=True).locator("visible=true").first
                 pole.locator("..").click(force=True)
-                page.wait_for_timeout(1000)
+                page.wait_for_timeout(1500)
 
-                page.get_by_text(wartosc, exact=True).last.click(force=True)
+                page.get_by_text(wartosc, exact=True).locator("visible=true").last.click(force=True)
                 page.wait_for_timeout(2000)
 
             wybierz_parametr("Sezon", sezon)
@@ -64,8 +67,8 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
             wybierz_parametr("Runda", runda)
             wybierz_parametr("Kolejka", kolejka)
 
-            print("Pobieram Tabele")
-            page.wait_for_timeout(1000)
+            print("Pobieram wygenerowaną tabelę...")
+            page.wait_for_timeout(2000)
 
             tabela_danych = page.evaluate(r'''() => {
                 let wyniki = [];
@@ -100,12 +103,12 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
             return tabela_danych
 
         except Exception as e:
-            print(f"WYSTĄPIŁ BŁĄD SZUKAJ HEADLESS PNG")
+            print(f"\n!!! WYSTĄPIŁ BŁĄD !!! Robię zrzut ekranu do pliku 'error_headless.png'...")
             page.screenshot(path="error_headless.png")
             browser.close()
             raise e
 
-#PRZYKŁADOWE UŻYCIE
+# Odpalenie skryptu
 dane_json = scrape_laczynaspilka(
     sezon="2025/2026",
     liga="Ekstraklasa",
