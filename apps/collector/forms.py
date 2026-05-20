@@ -1,7 +1,7 @@
-from django.db import models
+from django import forms
+from .models import LeagueQuery
 
-
-class LeagueQuery(models.Model):
+class LeagueQueryForm(forms.Form):    
     SEASON_CHOICES = [
         ("2023/2024", "2023/2024"),
         ("2024/2025", "2024/2025"),
@@ -24,8 +24,8 @@ class LeagueQuery(models.Model):
         ("Klasa C", "Klasa C"),
     ]
 
-    season = models.CharField(max_length=20, choices=SEASON_CHOICES)
-    league_type = models.CharField(max_length=50, default="Niższe ligi", editable=False)
-    province = models.CharField(max_length=100, choices=PROVINCE_CHOICES)
-    competition_class = models.CharField(max_length=100, choices=COMPETITION_CLASS_CHOICES)
-    group = models.CharField(max_length=100)
+    season = forms.ChoiceField(choices=SEASON_CHOICES)
+    province = forms.ChoiceField(choices=PROVINCE_CHOICES)
+    competition_class = forms.ChoiceField(choices=COMPETITION_CLASS_CHOICES)
+    group = forms.CharField(max_length=100)
+
