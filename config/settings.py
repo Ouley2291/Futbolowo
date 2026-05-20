@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     # Our Apps
     'apps.accounts',
     'apps.core',
-    'apps.collector'
+    'apps.collector',
     'apps.news',
     'apps.matches',
     'apps.players',

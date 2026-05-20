@@ -2,4 +2,10 @@
 
 {% block title %} Home {% endblock %}
 
-{% block body %} Hello World! {% endblock %}
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Szukaj</button>
+    </form>
+{% endblock %}
