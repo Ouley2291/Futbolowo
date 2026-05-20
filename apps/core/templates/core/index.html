@@ -4,6 +4,9 @@
 
 {% block body %}
 <div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+
+    <!-- ===================== Search Form ================== -->
+
   <div class="w-full max-w-md bg-forest-900 border border-forest-700/40 rounded-2xl p-8 shadow-[0_0_30px_rgba(181,255,77,0.07)]">
 
     <h1 class="font-display text-4xl tracking-wide text-forest-50 mb-8">Szukaj ligi</h1>
@@ -59,4 +62,64 @@
     </form>
   </div>
 </div>
+
+{% if standings %}
+<div class="max-w-5xl mx-auto px-4 py-10">
+  <div class="bg-forest-900 border border-forest-700/40 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(181,255,77,0.07)]">
+    <table class="w-full text-sm">
+
+      <thead>
+        <tr class="border-b border-forest-700/40">
+          <th class="px-4 py-3 text-left text-xs font-semibold tracking-widest uppercase text-forest-400">Poz</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold tracking-widest uppercase text-forest-400">Drużyna</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400">Mecze</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-[#b5ff4d]">Pkt</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden sm:table-cell">W</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden sm:table-cell">R</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden sm:table-cell">P</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden md:table-cell">G+</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden md:table-cell">G-</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold tracking-widest uppercase text-forest-400 hidden sm:table-cell">Bilans</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for entry in standings %}
+        <tr class="border-b border-forest-700/20 hover:bg-forest-800/50 transition-colors duration-150">
+
+          <td class="px-4 py-3 text-forest-400 font-medium w-10">{{ entry.Pozycja }}</td>
+
+          <td class="px-4 py-3 text-forest-50 font-medium">{{ entry.Druzyna }}</td>
+
+          <td class="px-4 py-3 text-center text-forest-300">{{ entry.Mecze }}</td>
+
+          <td class="px-4 py-3 text-center font-bold text-[#b5ff4d]">{{ entry.Punkty }}</td>
+
+          <td class="px-4 py-3 text-center text-forest-300 hidden sm:table-cell">{{ entry.Wygrane }}</td>
+          <td class="px-4 py-3 text-center text-forest-300 hidden sm:table-cell">{{ entry.Remisy }}</td>
+          <td class="px-4 py-3 text-center text-forest-300 hidden sm:table-cell">{{ entry.Porazki }}</td>
+
+          <td class="px-4 py-3 text-center text-forest-300 hidden md:table-cell">{{ entry.Gole_Zdobyte }}</td>
+          <td class="px-4 py-3 text-center text-forest-300 hidden md:table-cell">{{ entry.Gole_Stracone }}</td>
+
+          <td class="px-4 py-3 text-center hidden sm:table-cell">
+            {% if entry.Bilans > 0 %}
+              <span class="text-[#b5ff4d]">+{{ entry.Bilans }}</span>
+            {% elif entry.Bilans < 0 %}
+              <span class="text-red-400">{{ entry.Bilans }}</span>
+            {% else %}
+              <span class="text-forest-400">0</span>
+            {% endif %}
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+{% else %}
+<p class="text-forest-400 text-center py-10">Brak danych.</p>
+{% endif %}
 {% endblock %}
