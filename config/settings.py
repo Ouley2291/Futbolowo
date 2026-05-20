@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Our Apps
     'apps.accounts',
     'apps.core',
+    'apps.collector'
     'apps.news',
     'apps.matches',
     'apps.players',
@@ -127,3 +128,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'futbolowo' / 'static',
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'

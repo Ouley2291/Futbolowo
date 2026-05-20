@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,19 +7,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: {
+                            950: '#030d06',
+                            900: '#071810',
+                            800: '#0d2b1a',
+                            700: '#133d25',
+                            600: '#1a5233',
+                            500: '#216640',
+                            400: '#2e8b57',
+                            300: '#3dab6b',
+                            200: '#6fcf97',
+                            100: '#a8e6c1',
+                            50:  '#d4f5e3',
+                        },
+                    },
+                    fontFamily: {
+                        display: ['"Bebas Neue"', 'sans-serif'],
+                        body:    ['"DM Sans"', 'sans-serif'],
+                    },
+                    keyframes: {
+                        pulsedot: {
+                            '0%, 100%': { opacity: '1',  transform: 'scale(1)'   },
+                            '50%': { opacity: '0.4', transform: 'scale(0.65)' },
+                        },
+                    },
+                    animation: {
+                        pulsedot: 'pulsedot 1.4s ease-in-out infinite',
+                    },
+                },
+            },
+        };
+    </script>
 </head>
-<body>
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-        <a href="{% url 'core:index' %}" class="text-lg font-semibold hover:text-gray-500">Home</a>
-    </nav>
-    <div class="px-6 py-6">
-        {% block body %}
-            
-        {% endblock %}
+<body class="font-body bg-forest-950 text-forest-50 min-h-screen flex flex-col">
+
+  <!-- glow blob top -->
+  <div class="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[340px] rounded-full bg-forest-500/20 blur-3xl z-0"></div>
+
+  <!-- grid texture overlay -->
+  <div class="pointer-events-none fixed inset-0 z-0"
+       style="background-image:linear-gradient(rgba(33,102,64,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(33,102,64,.07) 1px,transparent 1px);background-size:40px 40px"></div>
+
+  <!-- ══════════════════════ NAVBAR ══════════════════════ -->
+  <header class="sticky top-0 z-50 bg-forest-900/80 backdrop-blur-xl border-b border-forest-700/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14">
+
+        <!-- Logo -->
+        <a href="{% url 'core:index' %}" class="flex items-center gap-2 no-underline">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+            <circle cx="11" cy="11" r="10" stroke="#b5ff4d" stroke-width="1.5"/>
+            <path d="M11 1C11 1 7 6 7 11C7 16 11 21 11 21" stroke="#b5ff4d" stroke-width="1" stroke-opacity=".5"/>
+            <path d="M1 11H21" stroke="#b5ff4d" stroke-width="1" stroke-opacity=".5"/>
+            <path d="M2.5 6.5H19.5M2.5 15.5H19.5" stroke="#b5ff4d" stroke-width="1" stroke-opacity=".3"/>
+          </svg>
+          <span class="font-display text-[1.75rem] tracking-wide leading-none"
+                style="color:#b5ff4d;text-shadow:0 0 18px rgba(181,255,77,.4)">
+            Futbol<span class="text-forest-300">owo</span>
+          </span>
+        </a>
+
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#"
+             class="flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">
+            <span class="inline-block w-[7px] h-[7px] rounded-full bg-[#b5ff4d] animate-pulsedot shrink-0"></span>
+            Na żywo
+          </a>
+          <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Wyniki</a>
+          <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Tabele</a>
+          <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Statystyki</a>
+        </nav>
+
+        <!-- Auth (desktop) -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="{% url 'login' %}"
+             class="px-4 py-1.5 rounded text-xs font-medium tracking-widest uppercase text-forest-200 border border-forest-500/50 hover:border-[#b5ff4d] hover:text-[#b5ff4d] hover:shadow-[0_0_12px_rgba(181,255,77,.2)] transition-all duration-200">
+            Zaloguj się
+          </a>
+          <a href="{% url 'register' %}"
+             class="px-4 py-1.5 rounded text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,.4)] transition-all duration-200">
+            Rejestracja
+          </a>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button id="hamburger"
+                class="md:hidden flex flex-col gap-[5px] p-1.5"
+                aria-label="Otwórz menu">
+          <span class="block w-5 h-0.5 bg-[#b5ff4d] rounded-full"></span>
+          <span class="block w-5 h-0.5 bg-[#b5ff4d] rounded-full"></span>
+          <span class="block w-3 h-0.5 bg-[#b5ff4d] rounded-full"></span>
+        </button>
+
+      </div>
     </div>
-    <footer class="px-6 py-6 flex justify-between items-center bg-gray-800">
-        Jakas tam tresc.....
-        <a href="#" class="text-lg text-teal-500 hover:text-teal-700">Contact</a>
-    </footer>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu"
+         class="hidden md:hidden border-t border-forest-700/30 bg-forest-900/95 px-4 py-5">
+      <nav class="flex flex-col gap-4 mb-5">
+        <a href="#"
+           class="flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">
+          <span class="inline-block w-[7px] h-[7px] rounded-full bg-[#b5ff4d] animate-pulsedot shrink-0"></span>
+          Na żywo
+        </a>
+        <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Wyniki</a>
+        <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Tabele</a>
+        <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Statystyki</a>
+      </nav>
+      <div class="flex gap-3">
+        <a href="{% url 'login' %}"
+           class="flex-1 text-center px-3 py-2 rounded text-xs font-medium tracking-widest uppercase text-forest-200 border border-forest-500/50 hover:border-[#b5ff4d] hover:text-[#b5ff4d] transition-all duration-200">
+          Zaloguj się
+        </a>
+        <a href="{% url 'register' %}"
+           class="flex-1 text-center px-3 py-2 rounded text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] transition-all duration-200">
+          Rejestracja
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════ MAIN ══════════════════════ -->
+  <main class="relative z-10 flex-1">
+    {% block body %}
+
+    {% endblock %}
+  </main>
+
+  <!-- ══════════════════════ FOOTER ══════════════════════ -->
+  <footer class="relative z-10 bg-forest-900/90 border-t border-forest-700/25">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+
+        <!-- Brand -->
+        <div>
+          <p class="font-display text-[1.6rem] tracking-wide leading-none mb-2"
+             style="color:#b5ff4d;text-shadow:0 0 14px rgba(181,255,77,.3)">
+            Futbol<span class="text-forest-300">owo</span>
+          </p>
+          <p class="text-forest-300 text-xs leading-relaxed">
+            Wyniki na żywo, tabele i statystyki.<br>Futbol w jednym miejscu.
+          </p>
+        </div>
+
+        <!-- Nav links -->
+        <div>
+          <p class="text-forest-200 text-xs font-semibold uppercase tracking-widest mb-3">Nawigacja</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Na żywo</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Wyniki</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Tabele</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Statystyki</a></li>
+          </ul>
+        </div>
+
+        <!-- Info links -->
+        <div>
+          <p class="text-forest-200 text-xs font-semibold uppercase tracking-widest mb-3">Informacje</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">O nas</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Regulamin</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Polityka prywatności</a></li>
+            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Kontakt</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="border-t border-forest-700/30 pt-5 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <p class="text-forest-400 text-xs">© {% now "Y" %} Futbolowo. Wszelkie prawa zastrzeżone.</p>
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-[7px] h-[7px] rounded-full bg-[#b5ff4d] animate-pulsedot shrink-0"></span>
+          <span class="text-forest-300 text-xs">Dane aktualizowane w czasie rzeczywistym</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
 </body>
 </html>
