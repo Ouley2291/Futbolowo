@@ -182,27 +182,31 @@ def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa
             browser.close()
             raise e
 
-#TESTY UŻYCIA
 
-wybrana_liga = "Niższe ligi"  # Tutaj wpisujecie wybraną lige
+def main():
+    #TESTY UŻYCIA
+    wybrana_liga = "Niższe ligi"  # Tutaj wpisujecie wybraną lige
 
-if wybrana_liga == "Ekstraklasa":
-    dane_json = scrape_laczynaspilka(
-        liga="Ekstraklasa",
-        runda="Wiosenna",
-        kolejka="33 (bieżąca)"
-    )
-else:
-    dane_json = scrape_laczynaspilka(
-        liga="Niższe ligi",
-        wojewodztwo="dolnośląskie",
-        klasa="Klasa B",
-        grupa="Wałbrzych: Klasa B"
-    )
+    if wybrana_liga == "Ekstraklasa":
+        dane_json = scrape_laczynaspilka(
+            liga="Ekstraklasa",
+            runda="Wiosenna",
+            kolejka="33 (bieżąca)"
+        )
+    else:
+        dane_json = scrape_laczynaspilka(
+            liga="Niższe ligi",
+            wojewodztwo="dolnośląskie",
+            klasa="Klasa B",
+            grupa="Wałbrzych: Klasa B"
+        )
 
-nazwa_pliku = f"tabela_{wybrana_liga.replace(' ', '_').lower()}.json"
+    nazwa_pliku = f"tabela_{wybrana_liga.replace(' ', '_').lower()}.json"
 
-with open(nazwa_pliku, "w", encoding="utf-8") as plik:
-    json.dump(dane_json, plik, indent=4, ensure_ascii=False)
+    with open(nazwa_pliku, "w", encoding="utf-8") as plik:
+        json.dump(dane_json, plik, indent=4, ensure_ascii=False)
 
-print(f"Dane pobrano do pliku: {nazwa_pliku}")
+    print(f"Dane pobrano do pliku: {nazwa_pliku}")
+
+if __name__ == "__main__":
+    main()

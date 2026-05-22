@@ -4,6 +4,8 @@ from apps.collector.forms import LeagueQueryForm
 
 import json
 
+from apps.web_scrapping.main_scrapper import scrape_laczynaspilka
+
 test_list = [
        {
         "Pozycja": "1.",
@@ -63,8 +65,10 @@ def index(request):
             data = form.cleaned_data
             data["league_type"] = "Niższe ligi"
 
+            standing = scrape_laczynaspilka(data["league_type"], wojewodztwo=data["province"], klasa=data["competition_class"], grupa=data["group"])
+
             print(data)
-            standing = test_list
+            print(standing)
     else:
         form = LeagueQueryForm()
 
