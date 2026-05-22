@@ -1,14 +1,47 @@
 # %%
 from playwright.sync_api import sync_playwright
 import json
+import re
 
-def scrape_laczynaspilka(sezon, liga, runda, kolejka):
+
+def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa=None, grupa=None):
+    """
+        Pobiera i zapisuje tabele ligowe z strony PZPN
+
+        Funkcja wykorzystuje bibliotekę Playwright do symulowania prawdziwej przeglądarki
+        Google Chrome w trybie w tle (headless). Sezon rozgrywek jest ustawiony na sztywno na "2025/2026".
+        Logika funkcji automatycznie wybiera ścieżkę klikania filtrów w zależności od
+        głównego argumentu `liga` dlatego możliwa jest do wyboru tylko ekstraklasa i Niższe Ligi
+
+        Args:
+            liga (str): Główna kategoria rozgrywek ("Ekstraklasa" lub "Niższe ligi" na innych nie testowane).
+            runda (str, optional): Nazwa rundy (np. "Wiosenna", "Jesienna").
+                                   [Wymagane dla ścieżki: "Ekstraklasa"]
+            kolejka (str, optional): Numer kolejki, dokładnie jak na stronie (np. "33 (bieżąca)").
+                                     [Wymagane dla ścieżki: "Ekstraklasa"]
+            wojewodztwo (str, optional): Nazwa województwa (np. "dolnośląskie").
+                                         [Wymagane dla ścieżki: "Niższe ligi"]
+            klasa (str, optional): Klasa rozgrywkowa (np. "Klasa B").
+                                   [Wymagane dla ścieżki: "Niższe ligi"]
+            grupa (str, optional): Nazwa przypisanej grupy (np. "Wałbrzych: Klasa B").
+                                   Nie wymaga wpisywania kropek na końcu, skrypt sam
+                                   dopasuje najdłuższy ciąg znaków.
+                                   [Wymagane dla ścieżki: "Niższe ligi"]
+
+        Returns:
+            list[dict]: Lista słowników, gdzie każdy słownik to jeden wiersz (klub) w tabeli.
+                        Klucze słownika to m.in.: "Pozycja", "Druzyna", "Mecze", "Punkty",
+                        "Wygrane", "Remisy", "Porazki", "Gole_Zdobyte", "Gole_Stracone", "Bilans".
+
+        Raises:
+            ValueError: Jeśli użytkownik nie poda wszystkich parametrów wymaganych dla danej ligi.
+            Exception: Zwraca błąd wykonania i automatycznie tworzy zrzut ekranu error_headless i wiecie
+            jak się wywróci dajcie znać na mess to będę konntynuował moje dalsze walki z tym cloudflarem
+        """
+
+    sezon = "2025/2026"
+
     with sync_playwright() as p:
-        #Używamy fizycznie zainstalowanego Chrome'a z systemu jak macie inną trzeba zmienić channel na inny
-
-
-
-
         browser = p.chromium.launch(
             channel="chrome",
             headless=True,
@@ -37,7 +70,6 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
         except Exception:
             print(" -> Brak ciasteczek, jedziemy dalej.")
 
-        # Wstrzykujemy kliknięcie w link, żeby gładko przejść na rozgrywki
         print("Wymuszam przejście do zakładki Rozgrywki...")
         page.evaluate('''() => {
             let linki = document.querySelectorAll("a[href='/rozgrywki'], a[href='https://www.laczynaspilka.pl/rozgrywki']");
@@ -51,25 +83,67 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
         try:
             page.get_by_text("Sezon", exact=True).locator("visible=true").first.wait_for(state="visible", timeout=15000)
 
-            print("Zmieniam filtry...")
+            print(f"Zmieniam filtry dla ścieżki: {liga}...")
 
             def wybierz_parametr(nazwa, wartosc):
                 print(f" -> Ustawiam: {nazwa} = {wartosc}")
-                pole = page.get_by_text(nazwa, exact=True).locator("visible=true").first
-                pole.locator("..").click(force=True)
-                page.wait_for_timeout(1500)
 
-                page.get_by_text(wartosc, exact=True).locator("visible=true").last.click(force=True)
+                regex_nazwa = re.compile(f"^\\s*{nazwa}\\s*$")
+                pole = page.get_by_text(regex_nazwa).locator("visible=true").first
+                opcja = page.get_by_text(wartosc).locator("visible=true").last
+
+                rozwinieto = False
+                for _ in range(4):
+                    pole.locator("..").click(force=True)
+                    page.wait_for_timeout(1000)
+
+                    if opcja.is_visible():
+                        rozwinieto = True
+                        break
+
+                    pole.click(force=True)
+                    page.wait_for_timeout(1000)
+
+                    if opcja.is_visible():
+                        rozwinieto = True
+                        break
+
+                if not rozwinieto:
+                    print(
+                        f" [!] UWAGA: Nie udało się bezbłędnie rozwinąć listy '{nazwa}'. Próbuję kliknąć opcję siłowo.")
+
+                opcja.click(force=True)
                 page.wait_for_timeout(2000)
+
+                # --- GŁÓWNA LOGIKA WYBORU ---
 
             wybierz_parametr("Sezon", sezon)
             wybierz_parametr("Liga", liga)
-            wybierz_parametr("Runda", runda)
-            wybierz_parametr("Kolejka", kolejka)
 
-            print("Pobieram wygenerowaną tabelę...")
+            if liga == "Ekstraklasa":
+                if not runda or not kolejka:
+                    raise ValueError("Dla Ekstraklasy musisz podać parametry: runda, kolejka!")
+
+                wybierz_parametr("Runda", runda)
+                wybierz_parametr("Kolejka", kolejka)
+
+            elif liga == "Niższe ligi":
+                if not wojewodztwo or not klasa or not grupa:
+                    raise ValueError("Dla niższych lig musisz podać parametry: wojewodztwo, klasa, grupa!")
+
+                wybierz_parametr("Województwa", wojewodztwo)
+                wybierz_parametr("Klasa rozgrywkowa", klasa)
+                wybierz_parametr("Grupa", grupa)
+
+            else:
+                print(f"Ostrzeżenie: Brak zdefiniowanej ścieżki dla ligi '{liga}'.")
+
+            # ---------------------------
+
+            print("Czekam na załadowanie się tabeli...")
             page.wait_for_timeout(2000)
 
+            print("Pobieram wygenerowaną tabelę...")
             tabela_danych = page.evaluate(r'''() => {
                 let wyniki = [];
                 let wiersze = document.querySelectorAll('div.row-hover');
@@ -108,12 +182,27 @@ def scrape_laczynaspilka(sezon, liga, runda, kolejka):
             browser.close()
             raise e
 
-# Odpalenie skryptu
-dane_json = scrape_laczynaspilka(
-    sezon="2025/2026",
-    liga="Ekstraklasa",
-    runda="Wiosenna",
-    kolejka="33 (bieżąca)"
-)
+#TESTY UŻYCIA
 
-print(json.dumps(dane_json, indent=4, ensure_ascii=False))
+wybrana_liga = "Niższe ligi"  # Tutaj wpisujecie wybraną lige
+
+if wybrana_liga == "Ekstraklasa":
+    dane_json = scrape_laczynaspilka(
+        liga="Ekstraklasa",
+        runda="Wiosenna",
+        kolejka="33 (bieżąca)"
+    )
+else:
+    dane_json = scrape_laczynaspilka(
+        liga="Niższe ligi",
+        wojewodztwo="dolnośląskie",
+        klasa="Klasa B",
+        grupa="Wałbrzych: Klasa B"
+    )
+
+nazwa_pliku = f"tabela_{wybrana_liga.replace(' ', '_').lower()}.json"
+
+with open(nazwa_pliku, "w", encoding="utf-8") as plik:
+    json.dump(dane_json, plik, indent=4, ensure_ascii=False)
+
+print(f"Dane pobrano do pliku: {nazwa_pliku}")
