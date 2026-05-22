@@ -50,10 +50,10 @@
       <!-- Grupa -->
       <div class="flex flex-col gap-1.5">
         <label class="text-xs font-medium tracking-widest uppercase text-forest-300">Grupa</label>
-        <input type="text" name="group" placeholder="np. Grupa I"
-               class="bg-forest-800 border border-forest-700/50 rounded-lg px-4 py-3 text-forest-50 placeholder-forest-500 text-sm focus:outline-none focus:border-[#b5ff4d] focus:shadow-[0_0_12px_rgba(181,255,77,0.15)] transition-all duration-200">
+        <select name="group" id="group-select"
+          class="bg-forest-800 border border-forest-700/50 rounded-lg px-4 py-3 text-forest-50 text-sm focus:outline-none focus:border-[#b5ff4d] focus:shadow-[0_0_12px_rgba(181,255,77,0.15)] transition-all duration-200 appearance-none cursor-pointer">
+        </select>
       </div>
-
       <button type="submit"
               class="mt-2 px-4 py-3 rounded-lg text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,0.4)] transition-all duration-200">
         Szukaj
@@ -122,4 +122,43 @@
 {% else %}
 <p class="text-forest-400 text-center py-10">Brak danych.</p>
 {% endif %}
+<script>
+  const GROUP_CHOICES = {{ groups|safe }};
+
+  const provinceSelect = document.querySelector('[name="province"]');
+  const classSelect = document.querySelector('[name="competition_class"]');
+  const groupSelect = document.getElementById('group-select');
+
+  function updateGroups() {
+    const province = provinceSelect.value;
+    const competitionClass = classSelect.value;
+
+    const options = GROUP_CHOICES?.[province]?.[competitionClass] ?? [];
+
+    groupSelect.innerHTML = '';
+
+    if (options.length === 0) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = '— brak grup —';
+      groupSelect.appendChild(opt);
+    } else {
+      options.forEach(group => {
+        const opt = document.createElement('option');
+        opt.value = group;
+        opt.textContent = group;
+        groupSelect.appendChild(opt);
+      });
+    }
+  }
+
+  provinceSelect.addEventListener('change', updateGroups);
+  classSelect.addEventListener('change', updateGroups);
+
+
+  updateGroups();
+</script>
+
+
 {% endblock %}
+

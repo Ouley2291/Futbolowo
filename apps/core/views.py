@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from apps.collector.forms import LeagueQueryForm
+from apps.collector.forms import LeagueQueryForm, GROUP_CHOICES
 
 import json
 
@@ -75,4 +75,5 @@ def index(request):
     return render(request, "core/index.html", {
         "form": form,
         "standings": standing,
+        "groups": json.dumps(GROUP_CHOICES, ensure_ascii=False)
     })
