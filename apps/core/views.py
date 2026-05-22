@@ -81,7 +81,7 @@ def index(request):
                         goals_conceded = int(pos["Gole_Stracone"]),
                         goals_balance = int(pos["Bilans"])
                     )
-            standing = league.positions.all().order_by("position")
+            standing = league.positions.all()
 
             #print(data)
             #print(standing)
