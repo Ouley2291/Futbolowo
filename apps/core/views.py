@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
-
 from apps.collector.forms import LeagueQueryForm, GROUP_CHOICES
-
 import json
-
 from apps.web_scrapping.main_scrapper import scrape_laczynaspilka
+from apps.Leagues.models import League, LeagueStanding
 
 test_list = [
        {
@@ -65,10 +63,28 @@ def index(request):
             data = form.cleaned_data
             data["league_type"] = "Niższe ligi"
 
-            standing = scrape_laczynaspilka(data["league_type"], wojewodztwo=data["province"], klasa=data["competition_class"], grupa=data["group"])
+            league, created = League.objects.get_or_create(competition_class=data["competition_class"], province=data["province"], group=data["group"], season=data["season"])
 
-            print(data)
-            print(standing)
+            if created:
+                standing = scrape_laczynaspilka(data["league_type"], wojewodztwo=data["province"], klasa=data["competition_class"], grupa=data["group"])
+                for pos in standing:
+                    new_team = LeagueStanding.objects.create(
+                        league = league,
+                        position = pos["Pozycja"],
+                        team = pos["Druzyna"],
+                        match_count = int(pos["Mecze"]),
+                        points = int(pos["Punkty"]),
+                        win_count = int(pos["Wygrane"]),
+                        draw_count = int(pos["Remisy"]),
+                        loose_count = int(pos["Porazki"]),
+                        goals_scored = int(pos["Gole_Zdobyte"]),
+                        goals_conceded = int(pos["Gole_Stracone"]),
+                        goals_balance = int(pos["Bilans"])
+                    )
+            standing = league.positions.all().order_by("position")
+
+            #print(data)
+            #print(standing)
     else:
         form = LeagueQueryForm()
 
