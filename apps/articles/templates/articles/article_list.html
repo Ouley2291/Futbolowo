@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+{% block title %}Artykuły{% endblock %}
+{% block body %}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Header -->
+  <div class="mb-10">
+    <h1 class="font-display text-5xl tracking-wide text-forest-50 mb-2">Artykuły</h1>
+    <p class="text-forest-400 text-sm">Najnowsze wiadomości ze świata futbolu</p>
+  </div>
+
+  <!-- Category filters -->
+  <div class="flex gap-2 mb-10 flex-wrap">
+    <a href="?category="
+       class="px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-forest-700/50 text-forest-300 hover:border-[#b5ff4d] hover:text-[#b5ff4d] transition-all duration-200">
+      Wszystkie
+    </a>
+    <a href="?category=Transfery"
+       class="px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-forest-700/50 text-forest-300 hover:border-[#b5ff4d] hover:text-[#b5ff4d] transition-all duration-200">
+      Transfery
+    </a>
+    <a href="?category=Mecze"
+       class="px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-forest-700/50 text-forest-300 hover:border-[#b5ff4d] hover:text-[#b5ff4d] transition-all duration-200">
+      Mecze
+    </a>
+    <a href="?category=Puchary"
+       class="px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-forest-700/50 text-forest-300 hover:border-[#b5ff4d] hover:text-[#b5ff4d] transition-all duration-200">
+      Puchary
+    </a>
+  </div>
+
+  {% if articles %}
+
+  <!-- Article grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for article in articles %}
+    <a href="{% url 'articles:view' article.pk %}"
+       class="group bg-forest-900 border border-forest-700/40 rounded-2xl overflow-hidden hover:border-forest-500/60 hover:shadow-[0_0_24px_rgba(181,255,77,0.08)] transition-all duration-300 flex flex-col">
+
+      <!-- Thumbnail -->
+      <div class="relative overflow-hidden h-48">
+        {% if article.thumbnail %}
+          <img src="{{ article.thumbnail.url }}"
+               alt="{{ article.title }}"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {% else %}
+          <div class="w-full h-full bg-forest-800 flex items-center justify-center">
+            <span class="text-forest-600 text-xs uppercase tracking-widest">Brak zdjęcia</span>
+          </div>
+        {% endif %}
+
+        <!-- Category badge -->
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase bg-forest-950/80 text-[#b5ff4d] border border-[#b5ff4d]/20 backdrop-blur-sm">
+          {{ article.category }}
+        </span>
+      </div>
+
+      <!-- Content -->
+      <div class="p-5 flex flex-col flex-1">
+        <h2 class="text-forest-50 font-semibold text-base leading-snug mb-2 group-hover:text-[#b5ff4d] transition-colors duration-200">
+          {{ article.title }}
+        </h2>
+
+        <div class="mt-auto pt-4 flex items-center justify-between">
+          <span class="text-forest-500 text-xs">{{ article.creator.username }}</span>
+          <span class="text-forest-500 text-xs">{{ article.created_at|date:"d.m.Y" }}</span>
+        </div>
+      </div>
+
+    </a>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="flex flex-col items-center justify-center py-24 text-center">
+    <p class="text-forest-400 text-sm mb-1">Brak artykułów</p>
+    <p class="text-forest-600 text-xs">Wróć później</p>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

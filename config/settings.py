@@ -136,3 +136,31 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# Media folders
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Folder where ckeditor uploads articles thumbnails
+
+CKEDITOR_5_UPLOADS_FOLDER = 'thumbnails/'
+
+# Ckeditor options
+
+CKEDITOR_5_CONFIGS = {
+    'extends': {
+        'toolbar': {
+            'items': [
+                'heading', '|',
+                'bold', 'italic', 'underline', '|',
+                'link', 'imageUpload', 'blockQuote', '|',
+                'bulletedList', 'numberedList', '|',
+                'undo', 'redo'
+            ],
+        },
+        'image': {
+            'toolbar': ['imageTextAlternative', 'imageStyle:full', 'imageStyle:side'],
+        },
+    }
+}

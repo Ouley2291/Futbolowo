@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 from apps.accounts.forms import LoginForm
 from apps.accounts import views as v
@@ -31,8 +33,8 @@ urlpatterns = [
 #    path('contact', include('apps.contact.urls')),
 #    path('gallery', include('apps.gallery.urls')),
 #    path('matches', include('apps.matches.urls')),
-#    path('articles', include('apps.articles.urls')),
+    path('articles', include('apps.articles.urls')),
     path('players', include('apps.players.urls')),
 #    path('teams', include('apps.teams.urls')),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

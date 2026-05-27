@@ -5,18 +5,16 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 class Article(models.Model):
+    CATEGORY_CHOICES = [
+        ("Transfery", "Transfery"),
+        ("Mecze", "Mecze"),
+        ("Puchary", "Puchary"),
+    ]
+
     title = models.CharField(max_length=100, null=True)
-    subtitle = models.CharField(max_length=200, null=True)
     creator = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, related_name="articles", on_delete=models.CASCADE, blank=True, null=True)
+    category = models.CharField(max_length=50 ,choices=CATEGORY_CHOICES)
     content = CKEditor5Field('Content', config_name='extends')
     created_at = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to='thumbnails/%Y/%m/%d/')
