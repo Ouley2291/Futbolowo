@@ -34,4 +34,5 @@ urlpatterns = [
 #    path('articles', include('apps.articles.urls')),
     path('players', include('apps.players.urls')),
 #    path('teams', include('apps.teams.urls')),
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
 ]

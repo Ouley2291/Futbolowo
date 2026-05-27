@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.collector',
     'apps.Leagues',
-    'apps.news',
     'apps.matches',
     'apps.players',
     'apps.contact',
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_ckeditor_5',
 ]
 
 # test comment ~MR

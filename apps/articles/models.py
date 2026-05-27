@@ -1,3 +1,33 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django_ckeditor_5.fields import CKEditor5Field
 
-# Create your models here.
+from django.utils import timezone
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=100, null=True)
+    subtitle = models.CharField(max_length=200, null=True)
+    creator = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name="articles", on_delete=models.CASCADE, blank=True, null=True)
+    content = CKEditor5Field('Content', config_name='extends')
+    created_at = models.DateTimeField(auto_now_add=True)
+    thumbnail = models.ImageField(upload_to='thumbnails/%Y/%m/%d/')
+        
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, related_name="comments", on_delete=models.CASCADE)
+    content = models.TextField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True)
+
