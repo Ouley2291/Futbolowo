@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Our Apps
     'apps.accounts',
+    'apps.articles',
     'apps.core',
     'apps.collector',
     'apps.Leagues',
