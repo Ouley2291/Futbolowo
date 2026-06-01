@@ -41,6 +41,9 @@ def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa
 
     sezon = "2025/2026"
 
+    if liga is not str:
+        raise ValueError
+
     with sync_playwright() as p:
         browser = p.chromium.launch(
             channel="chrome",
