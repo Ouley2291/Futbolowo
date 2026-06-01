@@ -35,11 +35,15 @@ def article_view(request, id):
 
 def article_list(request):
     articles = Article.objects.all().order_by("-created_at")
-    category = request.GET.get('category', '')
+    if 'category' in request.GET:
+        category = request.GET['category']
+    else:
+        category = ''
 
     if category:
         articles = articles.filter(category=category)
-        
+
     return render(request, "articles/article_list.html", {
         "articles": articles,
+
     })
