@@ -41,27 +41,38 @@ def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa
 
     sezon = "2025/2026"
 
-    if liga is not str:
-        raise ValueError
+    # sprawdzanie czy parametry funkcji są poprawne
+    if liga == "Ekstraklasa":
+        if not runda or not kolejka:
+            raise ValueError("Dla Ekstraklasy musisz podać parametry: runda, kolejka!")
+    elif liga == "Niższe ligi":
+        if not wojewodztwo or not klasa or not grupa:
+            raise ValueError("Dla niższych lig musisz podać parametry: wojewodztwo, klasa, grupa!")
+    else:
+        print(f"Ostrzeżenie: Brak zdefiniowanej ścieżki dla ligi '{liga}'.")
+
 
     with sync_playwright() as p:
+
+        # twożenie typowego clienta ala google chrome
         browser = p.chromium.launch(
             channel="chrome",
             headless=True,
             slow_mo=300,
             args=["--disable-blink-features=AutomationControlled"]
         )
-
         context = browser.new_context(
             viewport={'width': 1920, 'height': 1080},
             user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
         )
-
         context.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        page = context.new_page()
 
+        # twożenie i ładowanie obiektu strony
+        page = context.new_page()
         print("Ładuję główną stronę w tle (inicjalizacja sesji)...")
         page.goto("https://www.laczynaspilka.pl/", wait_until="networkidle")
+
+
 
         try:
             print("Sprawdzam i klikam ciasteczka...")
@@ -122,24 +133,13 @@ def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa
 
             wybierz_parametr("Sezon", sezon)
             wybierz_parametr("Liga", liga)
+            wybierz_parametr("Runda", runda)
+            wybierz_parametr("Kolejka", kolejka)
 
-            if liga == "Ekstraklasa":
-                if not runda or not kolejka:
-                    raise ValueError("Dla Ekstraklasy musisz podać parametry: runda, kolejka!")
-
-                wybierz_parametr("Runda", runda)
-                wybierz_parametr("Kolejka", kolejka)
-
-            elif liga == "Niższe ligi":
-                if not wojewodztwo or not klasa or not grupa:
-                    raise ValueError("Dla niższych lig musisz podać parametry: wojewodztwo, klasa, grupa!")
-
+            if liga == "Niższe ligi":
                 wybierz_parametr("Województwa", wojewodztwo)
                 wybierz_parametr("Klasa rozgrywkowa", klasa)
                 wybierz_parametr("Grupa", grupa)
-
-            else:
-                print(f"Ostrzeżenie: Brak zdefiniowanej ścieżki dla ligi '{liga}'.")
 
             # ---------------------------
 
