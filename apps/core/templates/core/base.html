@@ -93,6 +93,9 @@
         <!-- Auth (desktop) -->
         <div class="hidden md:flex items-center gap-3">
             {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                  <a href="{% url 'articles:add' %}">Nowy Artykuł</a>
+                {% endif %}
                 <form action="/logout/" method="POST">
                     {% csrf_token %} 
                     <button type="submit" class="px-4 py-1.5 rounded text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,.4)] transition-all duration-200">Wyloguj się</button>

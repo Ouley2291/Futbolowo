@@ -1,12 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Article, Comment
-from .forms import CommentForm
+from .forms import CommentForm, CreateArtcileForm
 
 
 @login_required
 def add(request):
-    pass
+    if not request.user.is_staff:
+        return redirect('core:index')
+    
+    if request.method == 'POST':
+        form = CreateArtcileForm(request.POST)
+
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
+            return redirect('articles:list')
+
+    else:
+        form = CreateArtcileForm()
+
+    return render(request, "articles/create_article.html", {
+        "form": form,
+    })
+
 
 
 def article_view(request, id):

@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-md bg-forest-800/80 backdrop-blur-xl border-b border-forest-500/30 rounded-2xl p-8 shadow-[0_0_20px_rgba(181,255,77,0.08)]">
+            <h1 class="text-2xl font-bold tracking-widest uppercase text-forest-200">Stworz artykul</h1>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-medium tracking-widest uppercase text-forest-300">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="w-full px-4 py-1.5 rounded text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,.4)] transition-all duration-200">
+                    Stworz artykul
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
