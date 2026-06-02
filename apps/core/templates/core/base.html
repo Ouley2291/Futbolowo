@@ -94,7 +94,7 @@
         <div class="hidden md:flex items-center gap-3">
             {% if user.is_authenticated %}
                 {% if user.is_superuser %}
-                  <a href="{% url 'articles:add' %}">Nowy Artykuł</a>
+                  <a href="{% url 'articles:add' %}" class="px-4 py-1.5 rounded text-xs font-medium tracking-widest uppercase text-forest-200 border border-forest-500/50 hover:border-[#b5ff4d] hover:text-[#b5ff4d] hover:shadow-[0_0_12px_rgba(181,255,77,.2)] transition-all duration-200">Nowy Artykuł</a>
                 {% endif %}
                 <form action="/logout/" method="POST">
                     {% csrf_token %} 
