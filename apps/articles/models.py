@@ -12,10 +12,10 @@ class Article(models.Model):
         ("Puchary", "Puchary"),
     ]
 
-    title = models.CharField(max_length=100, null=True)
+    title = models.CharField(max_length=200, null=True)
     creator = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
     category = models.CharField(max_length=50 ,choices=CATEGORY_CHOICES)
-    content = CKEditor5Field('Content', config_name='extends')
+    content = CKEditor5Field('Content', config_name='default')
     created_at = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to='thumbnails/%Y/%m/%d/')
         

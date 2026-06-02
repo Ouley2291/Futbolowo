@@ -149,7 +149,7 @@ CKEDITOR_5_UPLOADS_FOLDER = 'thumbnails/'
 # Ckeditor options
 
 CKEDITOR_5_CONFIGS = {
-    'extends': {
+    'default': {
         'toolbar': {
             'items': [
                 'heading', '|',

@@ -10,11 +10,11 @@ def add(request):
         return redirect('core:index')
     
     if request.method == 'POST':
-        form = CreateArtcileForm(request.POST)
+        form = CreateArtcileForm(request.POST, request.FILES)
 
         if form.is_valid():
             article = form.save(commit=False)
-            article.author = request.user
+            article.creator = request.user
             article.save()
             return redirect('articles:list')
 

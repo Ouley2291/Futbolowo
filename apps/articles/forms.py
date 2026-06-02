@@ -1,17 +1,14 @@
 from django import forms
 from .models import Comment, Article
+from django_ckeditor_5.widgets import CKEditor5Widget
 
 class CreateArtcileForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditor5Widget())
+
     class Meta:
         model = Article
         fields = ('title','category','content','thumbnail',)
 
-        widgets = {
-            'title': forms.Textarea(attrs={
-                "placeholder": "Tytul artykulu",
-                "class": "w-full px-6 py-4 rounded-xl border focus:ring-2 focus:ring-indigo-500"
-            })
-        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
