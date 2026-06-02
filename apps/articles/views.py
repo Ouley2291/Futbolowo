@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Article, Comment
-from .forms import CommentForm, CreateArtcileForm
+from .forms import CommentForm, CreateArtcileForm, EditArticleForm
 
 
 @login_required
@@ -25,6 +25,26 @@ def add(request):
         "form": form,
     })
 
+@login_required
+def edit(request, id):
+    if not request.user.is_staff:
+        return redirect('articles:view', pk=id)
+    
+    article = get_object_or_404(Article, pk=id)
+    
+    if request.method == 'POST':
+        form = EditArticleForm(request.POST, request.FILES, instance=article)
+
+        if form.is_valid():
+            form.save()
+            return redirect('articles:view', id=article.id)
+
+    else:
+        form = EditArticleForm(instance=article)
+
+    return render(request, "articles/edit_article.html", {
+        "form": form,
+    })
 
 
 def article_view(request, id):

@@ -10,6 +10,11 @@ class CreateArtcileForm(forms.ModelForm):
         fields = ('title','category','content','thumbnail',)
 
 
+class EditArticleForm(CreateArtcileForm):
+    class Meta(CreateArtcileForm.Meta):
+        fields =  ('title','category','content',)
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

@@ -35,6 +35,16 @@
     {{ article.content|safe }}
   </div>
 
+  <!-- Edytuj artykul -->
+   {% if request.user.is_superuser %}
+    <div class="mt-5">
+      <a href="{% url 'articles:edit' article.pk %}" class="self-end px-5 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,0.4)] transition-all duration-200">
+        Edytuj Artykul
+      </a>
+    </div>
+  {% endif %}
+
+
   <!-- Comments -->
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
 
