@@ -56,7 +56,7 @@ def scrape_laczynaspilka(liga, runda=None, kolejka=None, wojewodztwo=None, klasa
 
         # twożenie typowego clienta ala google chrome
         browser = p.chromium.launch(
-            headless=True,
+            headless=False,
             slow_mo=300,
             args=["--disable-blink-features=AutomationControlled"]
         )
