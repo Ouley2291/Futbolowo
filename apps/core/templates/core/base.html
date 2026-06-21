@@ -84,10 +84,10 @@
             <span class="inline-block w-[7px] h-[7px] rounded-full bg-[#b5ff4d] animate-pulsedot shrink-0"></span>
             Skróty z meczy
           </a>
-          <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Wyniki</a>
-          <a href="{% url 'core:index' %}" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Tabele</a>
-          <a href="{% url 'articles:list' %}" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Newsy</a>
-          <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Statystyki</a>
+          <!-- <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Wyniki</a> -->
+          <a href="{% url 'core:index' %}" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Szukaj ligi</a>
+          <a href="{% url 'articles:list' %}" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Newsy i artykuły</a> 
+          <!-- <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Statystyki</a> -->
         </nav>
 
         <!-- Auth (desktop) -->
@@ -168,7 +168,7 @@
             Futbol<span class="text-forest-300">owo</span>
           </p>
           <p class="text-forest-300 text-xs leading-relaxed">
-            Wyniki na żywo, tabele i statystyki.<br>Futbol w jednym miejscu.
+            Tabele na zywo, najnowsze wiadomości i skroty z meczy.<br>Amatorski futbol w jednym miejscu.
           </p>
         </div>
 
@@ -176,10 +176,11 @@
         <div>
           <p class="text-forest-200 text-xs font-semibold uppercase tracking-widest mb-3">Nawigacja</p>
           <ul class="space-y-2">
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Na żywo</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Wyniki</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Tabele</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Statystyki</a></li>
+            <li><a href="{% url 'matches:highlights_list' %}" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Skróty z meczy</a></li>
+            <!-- <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Wyniki</a></li> -->
+            <li><a href="{% url 'core:index' %}" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Szukaj ligi</a></li>
+            <li><a href="{% url 'articles:list' %}" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Newsy i artykuły</a></li>  
+            <!-- <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Statystyki</a></li> -->
           </ul>
         </div>
 
