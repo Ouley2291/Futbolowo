@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% block title %}Edytuj artykuł{% endblock %}
+{% block body %}
+
+<div class="flex justify-center px-4 py-12">
+  <div class="w-full max-w-2xl bg-forest-900 border border-forest-700/40 rounded-2xl p-8 shadow-[0_0_30px_rgba(181,255,77,0.07)]">
+    <h1 class="font-display text-4xl tracking-wide text-forest-50 mb-8">Kontakt</h1>
+    <div class="flex flex-col gap-6">
+        <p class="text-forest-200">Masz pytania, sugestie lub chcesz zgłosić błąd na stronie? Napisz do nas — odpowiadamy zazwyczaj w ciągu 24 godzin. </p>
+        <div class="flex flex-col gap-1.5">
+            <span class="text-xs font-medium tracking-widest uppercase text-forest-400">E-mail</span>
+            <span class="text-forest-50">kontakt@futbolowo.pl</span>
+        </div>
+        <div class="flex flex-col gap-1.5">
+            <span class="text-xs font-medium tracking-widest uppercase text-forest-400">Telefon</span>
+            <span class="text-forest-50">+48 123 456 789</span>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+            <span class="text-xs font-medium tracking-widest uppercase text-forest-400">Adres</span>
+            <span class="text-forest-50">ul. Zmyślona 67, 50-001 Wrocław</span>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

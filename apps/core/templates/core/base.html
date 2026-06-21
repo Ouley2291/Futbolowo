@@ -81,7 +81,6 @@
         <nav class="hidden md:flex items-center gap-6">
           <a href="{% url 'matches:highlights_list' %}"
              class="flex items-center gap-1.5 text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">
-            <span class="inline-block w-[7px] h-[7px] rounded-full bg-[#b5ff4d] animate-pulsedot shrink-0"></span>
             Skróty z meczy
           </a>
           <!-- <a href="#" class="text-xs font-medium tracking-widest uppercase text-forest-200 hover:text-[#b5ff4d] transition-colors duration-200">Wyniki</a> -->
@@ -188,10 +187,8 @@
         <div>
           <p class="text-forest-200 text-xs font-semibold uppercase tracking-widest mb-3">Informacje</p>
           <ul class="space-y-2">
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">O nas</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Regulamin</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Polityka prywatności</a></li>
-            <li><a href="#" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Kontakt</a></li>
+            <li><a href="{% url 'core:about' %}" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">O nas</a></li>
+            <li><a href="{% url 'core:contact' %}" class="text-forest-300 hover:text-[#b5ff4d] text-sm transition-colors duration-200">Kontakt</a></li>
           </ul>
         </div>
 

@@ -93,3 +93,11 @@ def index(request):
         "standings": standing,
         "groups": json.dumps(GROUP_CHOICES, ensure_ascii=False)
     })
+
+
+def contact(request):
+    return render(request, "core/contact.html")
+
+
+def about(request):
+    return render(request, "core/about.html")
