@@ -6,7 +6,7 @@
   <div class="mb-10 flex items-end justify-between flex-wrap gap-4">
     <div>
       <h1 class="font-display text-5xl tracking-wide text-forest-50 mb-2">Skróty z meczy</h1>
-      <p class="text-forest-400 text-sm">Najnowsze nagrania z meczy wrzucone przez zespoły</p>
+      <p class="text-forest-400 text-sm">Najnowsze nagrania z meczy wrzucone przez zespoły i naszą administracje</p>
     </div>
 
     {% if user.is_authenticated and user.profile.role in allowed_roles or request.user.is_superuser %}
