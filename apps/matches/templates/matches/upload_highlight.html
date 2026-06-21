@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% block title %}Dodaj skrót{% endblock %}
+{% block body %}
+
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-2xl bg-forest-900 border border-forest-700/40 rounded-2xl p-8 shadow-[0_0_30px_rgba(181,255,77,0.07)]">
+
+    <h1 class="font-display text-4xl tracking-wide text-forest-50 mb-8">Dodaj skrót z meczu</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-5">
+      {% csrf_token %}
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-medium tracking-widest uppercase text-forest-300">Tytuł</label>
+        <input type="text" name="title" placeholder="Tytuł filmu"
+               class="bg-forest-800 border border-forest-700/50 rounded-lg px-4 py-3 text-forest-50 placeholder-forest-500 text-sm focus:outline-none focus:border-[#b5ff4d] focus:shadow-[0_0_12px_rgba(181,255,77,0.15)] transition-all duration-200">
+        {% if form.title.errors %}
+          <p class="text-red-400 text-xs">{{ form.title.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-medium tracking-widest uppercase text-forest-300">Opis</label>
+        <textarea name="description" rows="4" placeholder="Krótki opis filmu..."
+                  class="bg-forest-800 border border-forest-700/50 rounded-lg px-4 py-3 text-forest-50 placeholder-forest-500 text-sm focus:outline-none focus:border-[#b5ff4d] focus:shadow-[0_0_12px_rgba(181,255,77,0.15)] transition-all duration-200 resize-none"></textarea>
+        {% if form.description.errors %}
+          <p class="text-red-400 text-xs">{{ form.description.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-medium tracking-widest uppercase text-forest-300">Plik wideo</label>
+        <input type="file" name="file" accept="video/*"
+               class="bg-forest-800 border border-forest-700/50 rounded-lg px-4 py-3 text-forest-300 text-sm focus:outline-none focus:border-[#b5ff4d] transition-all duration-200 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#b5ff4d] file:text-forest-950 hover:file:bg-[#caff7a] cursor-pointer">
+        {% if form.file.errors %}
+          <p class="text-red-400 text-xs">{{ form.file.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+
+      <button type="submit"
+              class="mt-2 px-4 py-3 rounded-lg text-xs font-semibold tracking-widest uppercase bg-[#b5ff4d] text-forest-950 hover:bg-[#caff7a] hover:shadow-[0_0_16px_rgba(181,255,77,0.4)] transition-all duration-200">
+        Dodaj film
+      </button>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

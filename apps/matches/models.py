@@ -1,6 +1,19 @@
 from django.db import models
 from apps.players.models import Player
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
+
+
+class Video(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField(blank=True)
+    file = models.FileField(upload_to='videos/%Y/%m/%d/')
+    uploaded_by = models.ForeignKey(User, related_name="videos", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
 
 class Match(models.Model):
     opponent = models.CharField(max_length=255)

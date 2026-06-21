@@ -32,7 +32,7 @@ urlpatterns = [
     path('accounts', include('apps.accounts.urls')),
 #    path('contact', include('apps.contact.urls')),
 #    path('gallery', include('apps.gallery.urls')),
-#    path('matches', include('apps.matches.urls')),
+    path('matches', include('apps.matches.urls')),
     path('articles', include('apps.articles.urls')),
     path('players', include('apps.players.urls')),
 #    path('teams', include('apps.teams.urls')),
