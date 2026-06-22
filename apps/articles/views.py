@@ -28,7 +28,7 @@ def add(request):
 @login_required
 def edit(request, id):
     if not request.user.is_staff:
-        return redirect('articles:view', pk=id)
+        return redirect('articles:view', id=id)
     
     article = get_object_or_404(Article, pk=id)
     
